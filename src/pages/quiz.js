@@ -26,12 +26,10 @@ export async function getServerSideProps() {
   const res = await supabase.from("questions").select().limit(5);
 
   // Pass data to the page via props
-  return { props: { questions: res.data} }
+  return { props: { questions: res.data } };
 }
 
-export default function Quiz({questions}) {
-  
-
+export default function Quiz({ questions }) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
   const [score, setScore] = useState(0);
@@ -72,7 +70,10 @@ export default function Quiz({questions}) {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-10 w-24 rounded"
             onClick={() => {
               setShowAnswer(true);
-              if ( questions[currentQuestion].answers.indexOf(selectedOption) === mcqChoices.indexOf(questions[currentQuestion].correctAnswer)) {
+              if (
+                questions[currentQuestion].answers.indexOf(selectedOption) ===
+                mcqChoices.indexOf(questions[currentQuestion].correctAnswer)
+              ) {
                 setScore(score + 1);
                 const newAnswers = [...answers];
                 newAnswers[currentQuestion] = true;
@@ -101,29 +102,33 @@ export default function Quiz({questions}) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center">
+    <div className=" overflow-y-scroll pt-32 bg-gray-100 flex justify-center">
       <div className="max-w-lg w-full my-auto">
         <h1 className="text-2xl">Quiz</h1>
         {currentQuiz && (
           <div>
-            <h2>{currentQuiz.question}</h2>
+            <h2 dangerouslySetInnerHTML={{ __html: currentQuiz.question }}></h2>
             <ul>
               {currentQuiz.answers.map((option, index) => (
                 <li key={index}>
-                  <label className="flex items-center">
+                  <label className="flex ">
                     <input
                       className={
-                        "mr-2 w-4 h-4 " +
+                        "mr-2 w-4 h-4 mt-1 " +
                         (showAnswer
-                          ? questions[currentQuestion].answers.indexOf(option) ===
-                            mcqChoices.indexOf(currentQuiz.correctAnswer)
+                          ? questions[currentQuestion].answers.indexOf(
+                              option
+                            ) === mcqChoices.indexOf(currentQuiz.correctAnswer)
                             ? "accent-green-300"
                             : questions[currentQuestion].answers.indexOf(
                                 selectedOption
-                              ) === questions[currentQuestion].answers.indexOf(option)
+                              ) ===
+                              questions[currentQuestion].answers.indexOf(option)
                             ? "accent-red-300"
                             : ""
-                          : questions[currentQuestion].answers.indexOf(selectedOption) ===
+                          : questions[currentQuestion].answers.indexOf(
+                              selectedOption
+                            ) ===
                             questions[currentQuestion].answers.indexOf(option)
                           ? "accent-blue-300"
                           : "")
@@ -131,7 +136,9 @@ export default function Quiz({questions}) {
                       type="radio"
                       value={option}
                       checked={
-                        questions[currentQuestion].answers.indexOf(selectedOption) ===
+                        questions[currentQuestion].answers.indexOf(
+                          selectedOption
+                        ) ===
                           questions[currentQuestion].answers.indexOf(option) ||
                         (showAnswer &&
                           questions[currentQuestion].answers.indexOf(option) ===
@@ -139,12 +146,19 @@ export default function Quiz({questions}) {
                       }
                       onChange={() => handleOptionSelect(option)}
                     />
-                    {option}
+                    <div dangerouslySetInnerHTML={{ __html: option }}></div>
                   </label>
                 </li>
               ))}
             </ul>
-            {showAnswer && <p className="pt-4 italic">{questions[currentQuestion].explanation}</p>}
+            {showAnswer && (
+              <p
+                className="pt-4"
+                dangerouslySetInnerHTML={{
+                  __html: questions[currentQuestion].explanation,
+                }}
+              ></p>
+            )}
           </div>
         )}
       </div>
