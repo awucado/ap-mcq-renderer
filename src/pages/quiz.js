@@ -44,7 +44,7 @@ const units = [
 export async function getServerSideProps() {
   // Fetch data from external API
   const res = await supabase
-    .from("ap_gov_questions")
+    .from("ap_bio_questions")
     .select()
     .order("id", "ascending")
 
