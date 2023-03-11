@@ -47,10 +47,9 @@ export async function getServerSideProps() {
     .from("ap_gov_questions")
     .select()
     .order("id", "ascending")
-    .limit(10);
 
   // Pass data to the page via props
-  return { props: { questions: res.data } };
+  return { props: { questions: res.data.sort(() => 0.5 - Math.random()).slice(0, 10) } };
 }
 
 export default function Quiz({ questions }) {
