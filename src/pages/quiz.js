@@ -46,10 +46,12 @@ export async function getServerSideProps() {
   const res = await supabase
     .from("ap_bio_questions")
     .select()
-    .order("id", "ascending")
+    .order("id", "ascending");
 
   // Pass data to the page via props
-  return { props: { questions: res.data.sort(() => 0.5 - Math.random()).slice(0, 10) } };
+  return {
+    props: { questions: res.data.sort(() => 0.5 - Math.random()).slice(0, 10) },
+  };
 }
 
 export default function Quiz({ questions }) {
@@ -127,7 +129,7 @@ export default function Quiz({ questions }) {
   return (
     <div className="flex items-center flex-col h-screen">
       <div className="max-w-lg w-full overflow-y-scroll h-full py-6">
-        <h1 className="text-2xl pb-2">AP U.S. Government and Politics</h1>
+        <h1 className="text-2xl pb-2">AP Bio #{currentQuiz.id}</h1>
         {currentQuiz && (
           <div>
             <h2 dangerouslySetInnerHTML={{ __html: currentQuiz.question }}></h2>
